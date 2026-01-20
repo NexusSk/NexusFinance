@@ -1,0 +1,220 @@
+/* App-specific styles - imported after index.css */
+
+/* Loading Screen */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--black-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 3px solid var(--white-faint);
+  border-top-color: var(--gold-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Custom cursor effect */
+.cursor-glow {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+body:hover .cursor-glow {
+  opacity: 1;
+}
+
+/* Noise texture overlay */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Scene positioning adjustments for different phases */
+.scene-container {
+  transition: opacity 0.5s ease;
+}
+
+/* Phase-specific hero adjustments */
+.hero-scroll .hero-content {
+  padding-left: 10%;
+}
+
+/* Smooth section transitions */
+.scroll-section {
+  background: transparent;
+}
+
+/* Gradient overlays for depth */
+.rotate-scroll::before,
+.toss-scroll::before,
+.land-scroll::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  pointer-events: none;
+}
+
+/* Phase text positioning */
+.rotate-scroll .phase-content,
+.toss-scroll .phase-content {
+  margin-left: auto;
+  margin-right: 10%;
+  text-align: right;
+}
+
+.land-scroll .phase-content {
+  margin-left: 10%;
+  margin-right: auto;
+  text-align: left;
+}
+
+/* Gold accent animations */
+@keyframes goldShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--gold-dark) 0%,
+    var(--gold-light) 25%,
+    var(--gold-dark) 50%,
+    var(--gold-light) 75%,
+    var(--gold-dark) 100%
+  );
+  background-size: 200% auto;
+  animation: goldShimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effects */
+.glow-gold {
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+}
+
+.glow-gold-sm {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+/* Interactive hover states */
+.interactive-scale {
+  transition: transform var(--transition-fast);
+}
+
+.interactive-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Glassmorphism card variant */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animated border gradient */
+.border-gradient {
+  position: relative;
+}
+
+.border-gradient::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: var(--gold-gradient);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--transition-medium);
+}
+
+.border-gradient:hover::before {
+  opacity: 1;
+}
+
+/* Text reveal animation helper */
+.text-reveal {
+  overflow: hidden;
+}
+
+.text-reveal > * {
+  display: block;
+  transform: translateY(100%);
+  animation: textReveal 0.8s ease forwards;
+}
+
+@keyframes textReveal {
+  to { transform: translateY(0); }
+}
+
+/* Particle effect background */
+.particles-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Responsive canvas adjustments */
+@media (max-width: 768px) {
+  .hero-scroll .hero-content {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  
+  .rotate-scroll .phase-content,
+  .toss-scroll .phase-content,
+  .land-scroll .phase-content {
+    margin: 0 auto;
+    text-align: center;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --white-subtle: rgba(255, 255, 255, 0.9);
+    --white-faint: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .scroll-dot {
+    animation: none;
+  }
+}
