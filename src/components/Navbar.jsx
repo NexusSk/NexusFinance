@@ -54,8 +54,9 @@ export function Navbar({ user, onSignInClick, onGetStartedClick, onDashboardClic
             onClick={toggleLanguage}
             title={language === 'sk' ? 'Switch to English' : 'Prepnúť na slovenčinu'}
           >
-            <span className={`lang-flag ${language === 'sk' ? 'active' : ''}`}>🇸🇰</span>
-            <span className={`lang-flag ${language === 'en' ? 'active' : ''}`}>🇬🇧</span>
+            <span className={`lang-text ${language === 'sk' ? 'active' : ''}`}>SVK</span>
+            <span className="lang-divider">/</span>
+            <span className={`lang-text ${language === 'en' ? 'active' : ''}`}>EN</span>
           </button>
 
           {user ? (
