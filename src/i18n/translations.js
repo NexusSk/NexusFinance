@@ -122,6 +122,7 @@ export const translations = {
       company: 'Spoločnosť',
       resources: 'Zdroje',
       legal: 'Právne',
+      contactUs: 'Kontaktujte nás',
       features: 'Funkcie',
       pricing: 'Cenník',
       security: 'Bezpečnosť',
@@ -140,6 +141,9 @@ export const translations = {
       licenses: 'Licencie',
       copyright: '© 2026 NexusFinance. Všetky práva vyhradené.',
       builtWith: 'Vytvorené s presnosťou pre moderného investora.',
+      location: 'Bratislava, Slovensko',
+      email: 'nexusskweb@gmail.com',
+      phone: '+421 944 110 266',
     },
     
     // Sign In Modal
@@ -425,6 +429,7 @@ export const translations = {
       company: 'Company',
       resources: 'Resources',
       legal: 'Legal',
+      contactUs: 'Contact Us',
       features: 'Features',
       pricing: 'Pricing',
       security: 'Security',
@@ -443,6 +448,9 @@ export const translations = {
       licenses: 'Licenses',
       copyright: '© 2026 NexusFinance. All rights reserved.',
       builtWith: 'Built with precision for the modern investor.',
+      location: 'Bratislava, Slovakia',
+      email: 'nexusskweb@gmail.com',
+      phone: '+421 944 110 266',
     },
     
     // Sign In Modal
