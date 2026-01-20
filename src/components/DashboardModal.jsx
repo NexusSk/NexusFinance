@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export function DashboardModal({ isOpen, onClose, user, initialTab = 'dashboard' }) {
   const [activeTab, setActiveTab] = useState(initialTab)
   const [isClosing, setIsClosing] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (isOpen) {
@@ -27,9 +29,9 @@ export function DashboardModal({ isOpen, onClose, user, initialTab = 'dashboard'
   if (!isOpen && !isClosing) return null
 
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: DashboardIcon },
-    { id: 'profile', label: 'Profile', icon: ProfileIcon },
-    { id: 'settings', label: 'Settings', icon: SettingsIcon },
+    { id: 'dashboard', label: t.userMenu.dashboard, icon: DashboardIcon },
+    { id: 'profile', label: t.userMenu.myProfile, icon: ProfileIcon },
+    { id: 'settings', label: t.userMenu.settings, icon: SettingsIcon },
   ]
 
   return (
@@ -42,7 +44,6 @@ export function DashboardModal({ isOpen, onClose, user, initialTab = 'dashboard'
         </button>
 
         <div className="dashboard-layout">
-          {/* Sidebar */}
           <aside className="dashboard-sidebar">
             <div className="sidebar-header">
               <div className="user-avatar-large">
@@ -50,7 +51,7 @@ export function DashboardModal({ isOpen, onClose, user, initialTab = 'dashboard'
               </div>
               <div className="sidebar-user-info">
                 <span className="sidebar-user-name">{user}</span>
-                <span className="sidebar-user-plan">Free Account</span>
+                <span className="sidebar-user-plan">{t.userMenu.freeAccount}</span>
               </div>
             </div>
 
@@ -70,16 +71,15 @@ export function DashboardModal({ isOpen, onClose, user, initialTab = 'dashboard'
             <div className="sidebar-footer">
               <button className="sidebar-nav-item logout" onClick={handleClose}>
                 <LogoutIcon />
-                Sign Out
+                {t.userMenu.signOut}
               </button>
             </div>
           </aside>
 
-          {/* Main Content */}
           <main className="dashboard-main">
-            {activeTab === 'dashboard' && <DashboardTab user={user} />}
-            {activeTab === 'profile' && <ProfileTab user={user} />}
-            {activeTab === 'settings' && <SettingsTab />}
+            {activeTab === 'dashboard' && <DashboardTab user={user} t={t} />}
+            {activeTab === 'profile' && <ProfileTab user={user} t={t} />}
+            {activeTab === 'settings' && <SettingsTab t={t} />}
           </main>
         </div>
       </div>
@@ -87,7 +87,6 @@ export function DashboardModal({ isOpen, onClose, user, initialTab = 'dashboard'
   )
 }
 
-// Icons
 function DashboardIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -127,27 +126,26 @@ function LogoutIcon() {
   )
 }
 
-// Dashboard Tab
-function DashboardTab({ user }) {
+function DashboardTab({ user, t }) {
   const stats = [
-    { label: 'Portfolio Value', value: '$124,532.00', change: '+12.5%', positive: true },
-    { label: 'Total Profit', value: '$18,245.00', change: '+8.2%', positive: true },
-    { label: 'Active Trades', value: '12', change: '-2', positive: false },
-    { label: 'Win Rate', value: '68%', change: '+3%', positive: true },
+    { label: t.dashboard.portfolioValue, value: '$124,532.00', change: '+12.5%', positive: true },
+    { label: t.dashboard.totalProfit, value: '$18,245.00', change: '+8.2%', positive: true },
+    { label: t.dashboard.activeTrades, value: '12', change: '-2', positive: false },
+    { label: t.dashboard.winRate, value: '68%', change: '+3%', positive: true },
   ]
 
   const recentActivity = [
-    { type: 'buy', asset: 'BTC', amount: '0.5', price: '$21,450', time: '2 hours ago' },
-    { type: 'sell', asset: 'ETH', amount: '2.0', price: '$1,580', time: '5 hours ago' },
-    { type: 'buy', asset: 'AAPL', amount: '10', price: '$178.50', time: '1 day ago' },
-    { type: 'dividend', asset: 'MSFT', amount: '$45.00', price: '', time: '2 days ago' },
+    { type: 'buy', asset: 'BTC', amount: '0.5', price: '$21,450', time: `2 ${t.dashboard.hoursAgo}` },
+    { type: 'sell', asset: 'ETH', amount: '2.0', price: '$1,580', time: `5 ${t.dashboard.hoursAgo}` },
+    { type: 'buy', asset: 'AAPL', amount: '10', price: '$178.50', time: `1 ${t.dashboard.daysAgo}` },
+    { type: 'dividend', asset: 'MSFT', amount: '$45.00', price: '', time: `2 ${t.dashboard.daysAgo}` },
   ]
 
   return (
     <div className="dashboard-tab">
       <div className="tab-header">
-        <h2>Welcome back, {user}!</h2>
-        <p>Here's what's happening with your investments today.</p>
+        <h2>{t.dashboard.welcome}, {user}!</h2>
+        <p>{t.dashboard.subtitle}</p>
       </div>
 
       <div className="stats-cards">
@@ -163,7 +161,7 @@ function DashboardTab({ user }) {
       </div>
 
       <div className="dashboard-section">
-        <h3>Recent Activity</h3>
+        <h3>{t.dashboard.recentActivity}</h3>
         <div className="activity-list">
           {recentActivity.map((activity, index) => (
             <div key={index} className="activity-item">
@@ -174,10 +172,12 @@ function DashboardTab({ user }) {
               </div>
               <div className="activity-details">
                 <span className="activity-title">
-                  {activity.type === 'dividend' ? 'Dividend received' : `${activity.type === 'buy' ? 'Bought' : 'Sold'} ${activity.amount} ${activity.asset}`}
+                  {activity.type === 'dividend' 
+                    ? t.dashboard.dividendReceived 
+                    : `${activity.type === 'buy' ? t.dashboard.bought : t.dashboard.sold} ${activity.amount} ${activity.asset}`}
                 </span>
                 <span className="activity-meta">
-                  {activity.price && `at ${activity.price} • `}{activity.time}
+                  {activity.price && `${t.dashboard.at} ${activity.price} • `}{activity.time}
                 </span>
               </div>
             </div>
@@ -186,23 +186,23 @@ function DashboardTab({ user }) {
       </div>
 
       <div className="dashboard-section">
-        <h3>Quick Actions</h3>
+        <h3>{t.dashboard.quickActions}</h3>
         <div className="quick-actions">
           <button className="quick-action-btn">
             <span className="qa-icon">+</span>
-            Deposit
+            {t.dashboard.deposit}
           </button>
           <button className="quick-action-btn">
             <span className="qa-icon">↔</span>
-            Transfer
+            {t.dashboard.transfer}
           </button>
           <button className="quick-action-btn">
             <span className="qa-icon">📊</span>
-            Analytics
+            {t.dashboard.analytics}
           </button>
           <button className="quick-action-btn">
             <span className="qa-icon">📄</span>
-            Reports
+            {t.dashboard.reports}
           </button>
         </div>
       </div>
@@ -210,13 +210,12 @@ function DashboardTab({ user }) {
   )
 }
 
-// Profile Tab
-function ProfileTab({ user }) {
+function ProfileTab({ user, t }) {
   return (
     <div className="dashboard-tab">
       <div className="tab-header">
-        <h2>Profile Settings</h2>
-        <p>Manage your personal information and preferences.</p>
+        <h2>{t.profile.title}</h2>
+        <p>{t.profile.subtitle}</p>
       </div>
 
       <div className="profile-section">
@@ -224,60 +223,60 @@ function ProfileTab({ user }) {
           <div className="profile-avatar-large">
             {user?.charAt(0).toUpperCase()}
           </div>
-          <button className="btn btn-secondary btn-small">Change Photo</button>
+          <button className="btn btn-secondary btn-small">{t.profile.changePhoto}</button>
         </div>
 
         <form className="profile-form">
           <div className="form-row">
             <div className="form-group">
-              <label>First Name</label>
+              <label>{t.profile.firstName}</label>
               <input type="text" defaultValue={user?.split(' ')[0] || user} />
             </div>
             <div className="form-group">
-              <label>Last Name</label>
+              <label>{t.profile.lastName}</label>
               <input type="text" defaultValue={user?.split(' ')[1] || ''} />
             </div>
           </div>
 
           <div className="form-group">
-            <label>Email Address</label>
+            <label>{t.profile.email}</label>
             <input type="email" defaultValue="user@example.com" />
           </div>
 
           <div className="form-group">
-            <label>Phone Number</label>
-            <input type="tel" placeholder="+1 (555) 000-0000" />
+            <label>{t.profile.phone}</label>
+            <input type="tel" placeholder="+421 900 000 000" />
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label>Country</label>
-              <select defaultValue="us">
+              <label>{t.profile.country}</label>
+              <select defaultValue="sk">
+                <option value="sk">Slovensko</option>
+                <option value="cz">Česká republika</option>
                 <option value="us">United States</option>
                 <option value="uk">United Kingdom</option>
-                <option value="ca">Canada</option>
-                <option value="au">Australia</option>
               </select>
             </div>
             <div className="form-group">
-              <label>Timezone</label>
-              <select defaultValue="est">
+              <label>{t.profile.timezone}</label>
+              <select defaultValue="cet">
+                <option value="cet">Central European Time</option>
                 <option value="est">Eastern Time (EST)</option>
                 <option value="pst">Pacific Time (PST)</option>
                 <option value="gmt">GMT</option>
-                <option value="cet">Central European Time</option>
               </select>
             </div>
           </div>
 
           <div className="form-group">
-            <label>Bio</label>
-            <textarea rows="3" placeholder="Tell us about yourself..."></textarea>
+            <label>{t.profile.bio}</label>
+            <textarea rows="3" placeholder={t.profile.bioPlaceholder}></textarea>
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn btn-primary">Save Changes</button>
-            <button type="button" className="btn btn-secondary">Cancel</button>
+            <button type="button" className="btn btn-primary">{t.profile.saveChanges}</button>
+            <button type="button" className="btn btn-secondary">{t.profile.cancel}</button>
           </div>
         </form>
       </div>
@@ -285,63 +284,62 @@ function ProfileTab({ user }) {
   )
 }
 
-// Settings Tab
-function SettingsTab() {
+function SettingsTab({ t }) {
   return (
     <div className="dashboard-tab">
       <div className="tab-header">
-        <h2>Settings</h2>
-        <p>Customize your experience and manage your account.</p>
+        <h2>{t.settings.title}</h2>
+        <p>{t.settings.subtitle}</p>
       </div>
 
       <div className="settings-section">
-        <h3>Notifications</h3>
+        <h3>{t.settings.notifications}</h3>
         <div className="settings-group">
           <SettingToggle 
-            label="Email Notifications"
-            description="Receive updates about your portfolio via email"
+            label={t.settings.emailNotifications}
+            description={t.settings.emailNotificationsDesc}
             defaultChecked={true}
           />
           <SettingToggle 
-            label="Push Notifications"
-            description="Get real-time alerts on your device"
+            label={t.settings.pushNotifications}
+            description={t.settings.pushNotificationsDesc}
             defaultChecked={true}
           />
           <SettingToggle 
-            label="Price Alerts"
-            description="Be notified when assets hit your target price"
+            label={t.settings.priceAlerts}
+            description={t.settings.priceAlertsDesc}
             defaultChecked={false}
           />
           <SettingToggle 
-            label="Weekly Reports"
-            description="Receive weekly portfolio performance summaries"
+            label={t.settings.weeklyReports}
+            description={t.settings.weeklyReportsDesc}
             defaultChecked={true}
           />
         </div>
       </div>
 
       <div className="settings-section">
-        <h3>Appearance</h3>
+        <h3>{t.settings.appearance}</h3>
         <div className="settings-group">
           <div className="setting-item">
             <div className="setting-info">
-              <span className="setting-label">Theme</span>
-              <span className="setting-description">Choose your preferred color scheme</span>
+              <span className="setting-label">{t.settings.theme}</span>
+              <span className="setting-description">{t.settings.themeDesc}</span>
             </div>
             <select className="setting-select" defaultValue="dark">
-              <option value="dark">Dark</option>
-              <option value="light">Light</option>
-              <option value="system">System</option>
+              <option value="dark">{t.settings.dark}</option>
+              <option value="light">{t.settings.light}</option>
+              <option value="system">{t.settings.system}</option>
             </select>
           </div>
           <div className="setting-item">
             <div className="setting-info">
-              <span className="setting-label">Currency Display</span>
-              <span className="setting-description">Primary currency for displaying values</span>
+              <span className="setting-label">{t.settings.currency}</span>
+              <span className="setting-description">{t.settings.currencyDesc}</span>
             </div>
-            <select className="setting-select" defaultValue="usd">
-              <option value="usd">USD ($)</option>
+            <select className="setting-select" defaultValue="eur">
               <option value="eur">EUR (€)</option>
+              <option value="usd">USD ($)</option>
               <option value="gbp">GBP (£)</option>
               <option value="btc">BTC (₿)</option>
             </select>
@@ -350,39 +348,39 @@ function SettingsTab() {
       </div>
 
       <div className="settings-section">
-        <h3>Security</h3>
+        <h3>{t.settings.security}</h3>
         <div className="settings-group">
           <SettingToggle 
-            label="Two-Factor Authentication"
-            description="Add an extra layer of security to your account"
+            label={t.settings.twoFactor}
+            description={t.settings.twoFactorDesc}
             defaultChecked={false}
           />
           <div className="setting-item">
             <div className="setting-info">
-              <span className="setting-label">Change Password</span>
-              <span className="setting-description">Update your account password</span>
+              <span className="setting-label">{t.settings.changePassword}</span>
+              <span className="setting-description">{t.settings.changePasswordDesc}</span>
             </div>
-            <button className="btn btn-secondary btn-small">Update</button>
+            <button className="btn btn-secondary btn-small">{t.settings.update}</button>
           </div>
           <div className="setting-item">
             <div className="setting-info">
-              <span className="setting-label">Active Sessions</span>
-              <span className="setting-description">Manage devices logged into your account</span>
+              <span className="setting-label">{t.settings.activeSessions}</span>
+              <span className="setting-description">{t.settings.activeSessionsDesc}</span>
             </div>
-            <button className="btn btn-secondary btn-small">Manage</button>
+            <button className="btn btn-secondary btn-small">{t.settings.manage}</button>
           </div>
         </div>
       </div>
 
       <div className="settings-section danger-zone">
-        <h3>Danger Zone</h3>
+        <h3>{t.settings.dangerZone}</h3>
         <div className="settings-group">
           <div className="setting-item">
             <div className="setting-info">
-              <span className="setting-label">Delete Account</span>
-              <span className="setting-description">Permanently delete your account and all data</span>
+              <span className="setting-label">{t.settings.deleteAccount}</span>
+              <span className="setting-description">{t.settings.deleteAccountDesc}</span>
             </div>
-            <button className="btn btn-danger btn-small">Delete</button>
+            <button className="btn btn-danger btn-small">{t.settings.delete}</button>
           </div>
         </div>
       </div>

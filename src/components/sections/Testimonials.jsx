@@ -1,33 +1,14 @@
 import { useRef, useEffect } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 gsap.registerPlugin(ScrollTrigger)
-
-const testimonials = [
-  {
-    quote: "NexusFinance has completely transformed how I manage my investments. The AI-powered insights are incredibly accurate.",
-    author: "Sarah Chen",
-    role: "Portfolio Manager",
-    avatar: "SC"
-  },
-  {
-    quote: "The best financial platform I've ever used. The interface is intuitive and the returns speak for themselves.",
-    author: "Michael Roberts",
-    role: "Private Investor",
-    avatar: "MR"
-  },
-  {
-    quote: "Security and transparency are paramount in finance. NexusFinance delivers on both fronts exceptionally well.",
-    author: "Emily Watson",
-    role: "CFO, TechCorp",
-    avatar: "EW"
-  }
-]
 
 export function Testimonials() {
   const sectionRef = useRef()
   const cardsRef = useRef([])
+  const { t } = useLanguage()
   
   useEffect(() => {
     const cards = cardsRef.current
@@ -57,14 +38,14 @@ export function Testimonials() {
     <section ref={sectionRef} className="testimonials-section">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">Testimonials</span>
+          <span className="section-tag">{t.testimonials.tag}</span>
           <h2 className="section-title">
-            Trusted by <span className="gold-text">industry leaders</span>
+            {t.testimonials.title} <span className="gold-text">{t.testimonials.titleHighlight}</span>
           </h2>
         </div>
         
         <div className="testimonials-grid">
-          {testimonials.map((testimonial, index) => (
+          {t.testimonials.items.map((testimonial, index) => (
             <div
               key={index}
               ref={el => cardsRef.current[index] = el}
@@ -77,7 +58,9 @@ export function Testimonials() {
               </div>
               <p className="testimonial-quote">{testimonial.quote}</p>
               <div className="testimonial-author">
-                <div className="author-avatar">{testimonial.avatar}</div>
+                <div className="author-avatar">
+                  {testimonial.author.split(' ').map(n => n[0]).join('')}
+                </div>
                 <div className="author-info">
                   <span className="author-name">{testimonial.author}</span>
                   <span className="author-role">{testimonial.role}</span>

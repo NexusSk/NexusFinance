@@ -1,62 +1,17 @@
 import { useState, useEffect } from 'react'
-
-const plans = [
-  {
-    id: 'starter',
-    name: 'Starter',
-    price: 29,
-    period: 'month',
-    description: 'Perfect for beginners exploring investment',
-    features: [
-      'Basic portfolio tracking',
-      'Market news feed',
-      '5 watchlist slots',
-      'Email support',
-      'Mobile app access'
-    ],
-    popular: false
-  },
-  {
-    id: 'professional',
-    name: 'Professional',
-    price: 79,
-    period: 'month',
-    description: 'For serious investors seeking growth',
-    features: [
-      'Advanced analytics dashboard',
-      'Real-time market data',
-      'Unlimited watchlists',
-      'AI-powered insights',
-      'Priority support',
-      'API access',
-      'Custom alerts'
-    ],
-    popular: true
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: 199,
-    period: 'month',
-    description: 'Full suite for professional traders',
-    features: [
-      'Everything in Professional',
-      'Dedicated account manager',
-      'Custom integrations',
-      'White-label options',
-      'Advanced risk analytics',
-      'Team collaboration tools',
-      'Compliance reporting',
-      'SLA guarantee'
-    ],
-    popular: false
-  }
-]
+import { useLanguage } from '../i18n/LanguageContext'
 
 export function SubscriptionModal({ isOpen, onClose }) {
   const [selectedPlan, setSelectedPlan] = useState('professional')
   const [billingCycle, setBillingCycle] = useState('monthly')
   const [isClosing, setIsClosing] = useState(false)
+  const { t, language } = useLanguage()
+
+  const prices = {
+    starter: 29,
+    professional: 79,
+    enterprise: 199
+  }
 
   useEffect(() => {
     if (isOpen) {
@@ -78,18 +33,28 @@ export function SubscriptionModal({ isOpen, onClose }) {
   }
 
   const handleSubscribe = (planId) => {
-    alert(`Thank you for choosing the ${plans.find(p => p.id === planId).name} plan! This is a demo - no payment will be processed.`)
+    const planName = t.subscription.plans[planId].name
+    const message = language === 'sk' 
+      ? `Ďakujeme za výber plánu ${planName}! Toto je demo - platba nebude spracovaná.`
+      : `Thank you for choosing the ${planName} plan! This is a demo - no payment will be processed.`
+    alert(message)
     handleClose()
   }
 
   const getPrice = (basePrice) => {
     if (billingCycle === 'yearly') {
-      return Math.round(basePrice * 0.8) // 20% discount for yearly
+      return Math.round(basePrice * 0.8)
     }
     return basePrice
   }
 
   if (!isOpen && !isClosing) return null
+
+  const plans = [
+    { id: 'starter', price: prices.starter, popular: false },
+    { id: 'professional', price: prices.professional, popular: true },
+    { id: 'enterprise', price: prices.enterprise, popular: false }
+  ]
 
   return (
     <div className={`modal-overlay ${isClosing ? 'closing' : ''}`} onClick={handleClose}>
@@ -101,22 +66,22 @@ export function SubscriptionModal({ isOpen, onClose }) {
         </button>
 
         <div className="subscription-header">
-          <h2>Choose Your Plan</h2>
-          <p>Select the perfect plan to accelerate your financial journey</p>
+          <h2>{t.subscription.title}</h2>
+          <p>{t.subscription.subtitle}</p>
           
           <div className="billing-toggle">
             <button 
               className={`toggle-btn ${billingCycle === 'monthly' ? 'active' : ''}`}
               onClick={() => setBillingCycle('monthly')}
             >
-              Monthly
+              {t.subscription.monthly}
             </button>
             <button 
               className={`toggle-btn ${billingCycle === 'yearly' ? 'active' : ''}`}
               onClick={() => setBillingCycle('yearly')}
             >
-              Yearly
-              <span className="save-badge">Save 20%</span>
+              {t.subscription.yearly}
+              <span className="save-badge">{t.subscription.save}</span>
             </button>
           </div>
         </div>
@@ -128,27 +93,27 @@ export function SubscriptionModal({ isOpen, onClose }) {
               className={`plan-card ${plan.popular ? 'popular' : ''} ${selectedPlan === plan.id ? 'selected' : ''}`}
               onClick={() => setSelectedPlan(plan.id)}
             >
-              {plan.popular && <div className="popular-badge">Most Popular</div>}
+              {plan.popular && <div className="popular-badge">{t.subscription.popular}</div>}
               
               <div className="plan-header">
-                <h3 className="plan-name">{plan.name}</h3>
-                <p className="plan-description">{plan.description}</p>
+                <h3 className="plan-name">{t.subscription.plans[plan.id].name}</h3>
+                <p className="plan-description">{t.subscription.plans[plan.id].description}</p>
               </div>
 
               <div className="plan-price">
                 <span className="currency">$</span>
                 <span className="amount">{getPrice(plan.price)}</span>
-                <span className="period">/{billingCycle === 'yearly' ? 'mo' : 'month'}</span>
+                <span className="period">/{billingCycle === 'yearly' ? 'mo' : t.subscription.month}</span>
               </div>
 
               {billingCycle === 'yearly' && (
                 <p className="yearly-total">
-                  Billed ${getPrice(plan.price) * 12}/year
+                  {t.subscription.billedYearly} ${getPrice(plan.price) * 12}/{t.subscription.year}
                 </p>
               )}
 
               <ul className="plan-features">
-                {plan.features.map((feature, index) => (
+                {t.subscription.plans[plan.id].features.map((feature, index) => (
                   <li key={index}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -165,7 +130,7 @@ export function SubscriptionModal({ isOpen, onClose }) {
                   handleSubscribe(plan.id)
                 }}
               >
-                {plan.popular ? 'Get Started' : 'Choose Plan'}
+                {plan.popular ? t.nav.getStarted : t.subscription.choosePlan}
               </button>
             </div>
           ))}
@@ -177,21 +142,21 @@ export function SubscriptionModal({ isOpen, onClose }) {
               <path d="M12 22S20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <span>30-day money-back guarantee</span>
+            <span>{t.subscription.guarantee}</span>
           </div>
           <div className="guarantee">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
               <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" strokeWidth="2"/>
             </svg>
-            <span>Secure payment processing</span>
+            <span>{t.subscription.securePayment}</span>
           </div>
           <div className="guarantee">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
               <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
-            <span>Cancel anytime</span>
+            <span>{t.subscription.cancelAnytime}</span>
           </div>
         </div>
       </div>

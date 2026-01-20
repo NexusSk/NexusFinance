@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export function SignInModal({ isOpen, onClose, onSignIn }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [isClosing, setIsClosing] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (isOpen) {
@@ -49,37 +51,37 @@ export function SignInModal({ isOpen, onClose, onSignIn }) {
           <div className="modal-logo">
             <div className="logo-icon">N</div>
           </div>
-          <h2>Welcome Back</h2>
-          <p>Sign in to access your account</p>
+          <h2>{t.signIn.welcome}</h2>
+          <p>{t.signIn.subtitle}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="sign-in-form">
           <div className="form-group">
-            <label htmlFor="name">Your Name</label>
+            <label htmlFor="name">{t.signIn.name}</label>
             <input
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your name"
+              placeholder={t.signIn.namePlaceholder}
               required
               autoFocus
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">{t.signIn.email}</label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder={t.signIn.emailPlaceholder}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t.signIn.password}</label>
             <input
               type="password"
               id="password"
@@ -91,13 +93,13 @@ export function SignInModal({ isOpen, onClose, onSignIn }) {
             <label className="checkbox-label">
               <input type="checkbox" />
               <span className="checkmark"></span>
-              Remember me
+              {t.signIn.rememberMe}
             </label>
-            <a href="#" className="forgot-link">Forgot password?</a>
+            <a href="#" className="forgot-link">{t.signIn.forgotPassword}</a>
           </div>
 
           <button type="submit" className="btn btn-primary btn-full">
-            Join Now
+            {t.signIn.joinNow}
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -105,7 +107,7 @@ export function SignInModal({ isOpen, onClose, onSignIn }) {
         </form>
 
         <div className="modal-divider">
-          <span>or continue with</span>
+          <span>{t.signIn.orContinue}</span>
         </div>
 
         <div className="social-sign-in">
@@ -127,7 +129,7 @@ export function SignInModal({ isOpen, onClose, onSignIn }) {
         </div>
 
         <p className="modal-footer-text">
-          Don't have an account? <a href="#">Create one</a>
+          {t.signIn.noAccount} <a href="#">{t.signIn.createOne}</a>
         </p>
       </div>
     </div>

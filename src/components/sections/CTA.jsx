@@ -1,12 +1,14 @@
 import { useRef, useEffect } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export function CTA({ onGetStarted }) {
   const sectionRef = useRef()
   const contentRef = useRef()
+  const { t } = useLanguage()
   
   useEffect(() => {
     gsap.fromTo(
@@ -39,24 +41,23 @@ export function CTA({ onGetStarted }) {
       <div className="container">
         <div ref={contentRef} className="cta-content">
           <h2 className="cta-title">
-            Ready to transform your <span className="gold-text">financial future</span>?
+            {t.cta.title} <span className="gold-text">{t.cta.titleHighlight}</span>?
           </h2>
           <p className="cta-subtitle">
-            Join thousands of investors who have already discovered the power of NexusFinance.
-            Start your journey today with a free account.
+            {t.cta.subtitle}
           </p>
           <div className="cta-buttons">
             <button className="btn btn-primary btn-large" onClick={onGetStarted}>
-              Start Free Trial
+              {t.cta.startTrial}
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
             <button className="btn btn-outline btn-large">
-              Schedule Demo
+              {t.cta.scheduleDemo}
             </button>
           </div>
-          <p className="cta-note">No credit card required. Cancel anytime.</p>
+          <p className="cta-note">{t.cta.note}</p>
         </div>
       </div>
     </section>

@@ -1,15 +1,9 @@
 import { useRef, useEffect, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 gsap.registerPlugin(ScrollTrigger)
-
-const stats = [
-  { value: 2.5, suffix: 'B+', label: 'Assets Under Management', prefix: '$' },
-  { value: 150, suffix: 'K+', label: 'Active Users', prefix: '' },
-  { value: 99.9, suffix: '%', label: 'Uptime Guarantee', prefix: '' },
-  { value: 24, suffix: '/7', label: 'Customer Support', prefix: '' }
-]
 
 function AnimatedNumber({ value, suffix, prefix, inView }) {
   const [displayValue, setDisplayValue] = useState(0)
@@ -44,6 +38,14 @@ function AnimatedNumber({ value, suffix, prefix, inView }) {
 export function Stats() {
   const sectionRef = useRef()
   const [inView, setInView] = useState(false)
+  const { t } = useLanguage()
+
+  const stats = [
+    { value: 2.5, suffix: 'B+', label: t.stats.aum, prefix: '$' },
+    { value: 150, suffix: 'K+', label: t.stats.users, prefix: '' },
+    { value: 99.9, suffix: '%', label: t.stats.uptime, prefix: '' },
+    { value: 24, suffix: '/7', label: t.stats.support, prefix: '' }
+  ]
   
   useEffect(() => {
     ScrollTrigger.create({

@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLanguage } from './i18n/LanguageContext'
 import { Scene } from './components/Scene'
 import { Navbar } from './components/Navbar'
 import { SignInModal } from './components/SignInModal'
@@ -21,6 +22,7 @@ function App() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const [phase, setPhase] = useState('intro')
   const [heroVisible, setHeroVisible] = useState(false)
+  const { t } = useLanguage()
   
   // User and modal states
   const [user, setUser] = useState(null)
@@ -43,12 +45,10 @@ function App() {
   }
   
   useEffect(() => {
-    // Initial animation - show hero after short delay
     const timer = setTimeout(() => {
       setHeroVisible(true)
     }, 500)
     
-    // Create scroll-triggered phases
     const sections = {
       intro: { start: 0, end: 0.15 },
       rotate: { start: 0.15, end: 0.35 },
@@ -56,7 +56,6 @@ function App() {
       land: { start: 0.55, end: 0.7 },
     }
     
-    // Main scroll trigger for 3D scene
     ScrollTrigger.create({
       trigger: containerRef.current,
       start: 'top top',
@@ -66,17 +65,14 @@ function App() {
         const progress = self.progress
         setScrollProgress(progress)
         
-        // Determine current phase
         if (progress < sections.intro.end) {
           setPhase('intro')
         } else if (progress < sections.rotate.end) {
           setPhase('rotate')
-          // Normalize progress for rotate phase
           const rotateProgress = (progress - sections.rotate.start) / (sections.rotate.end - sections.rotate.start)
           setScrollProgress(rotateProgress)
         } else if (progress < sections.toss.end) {
           setPhase('toss')
-          // Normalize progress for toss phase
           const tossProgress = (progress - sections.toss.start) / (sections.toss.end - sections.toss.start)
           setScrollProgress(tossProgress)
         } else {
@@ -87,9 +83,8 @@ function App() {
       }
     })
     
-    // Phase indicator texts
     const phases = document.querySelectorAll('.phase-text')
-    phases.forEach((phase, index) => {
+    phases.forEach((phase) => {
       gsap.fromTo(
         phase,
         { opacity: 0, y: 20 },
@@ -123,7 +118,6 @@ function App() {
         onSignOut={handleSignOut}
       />
       
-      {/* Modals */}
       <SignInModal 
         isOpen={signInModalOpen}
         onClose={() => setSignInModalOpen(false)}
@@ -140,53 +134,40 @@ function App() {
         initialTab={dashboardTab}
       />
       
-      {/* Fixed 3D Scene */}
       <div className="scene-container">
         <Scene scrollProgress={scrollProgress} phase={phase} />
       </div>
       
-      {/* Scroll Sections */}
       <div className="scroll-content">
-        {/* Hero Section with 3D Coin */}
         <section className="scroll-section hero-scroll">
           <Hero isVisible={heroVisible} onGetStarted={() => setSubscriptionModalOpen(true)} />
         </section>
         
-        {/* Rotation Phase */}
         <section className="scroll-section rotate-scroll">
           <div className="phase-content">
-            <p className="phase-text phase-subtitle">Watch the coin spin</p>
-            <h2 className="phase-text phase-title">Precision in Motion</h2>
-            <p className="phase-text phase-description">
-              Every rotation represents our commitment to accurate, real-time market analysis.
-            </p>
+            <p className="phase-text phase-subtitle">{t.phases.rotate.subtitle}</p>
+            <h2 className="phase-text phase-title">{t.phases.rotate.title}</h2>
+            <p className="phase-text phase-description">{t.phases.rotate.description}</p>
           </div>
         </section>
         
-        {/* Toss Phase */}
         <section className="scroll-section toss-scroll">
           <div className="phase-content">
-            <p className="phase-text phase-subtitle">The coin rises</p>
-            <h2 className="phase-text phase-title">Elevate Your Portfolio</h2>
-            <p className="phase-text phase-description">
-              Take your investments to new heights with our cutting-edge strategies.
-            </p>
+            <p className="phase-text phase-subtitle">{t.phases.toss.subtitle}</p>
+            <h2 className="phase-text phase-title">{t.phases.toss.title}</h2>
+            <p className="phase-text phase-description">{t.phases.toss.description}</p>
           </div>
         </section>
         
-        {/* Landing Phase */}
         <section className="scroll-section land-scroll">
           <div className="phase-content">
-            <p className="phase-text phase-subtitle">A perfect landing</p>
-            <h2 className="phase-text phase-title">Secure Returns</h2>
-            <p className="phase-text phase-description">
-              Land on the winning side with our proven track record of success.
-            </p>
+            <p className="phase-text phase-subtitle">{t.phases.land.subtitle}</p>
+            <h2 className="phase-text phase-title">{t.phases.land.title}</h2>
+            <p className="phase-text phase-description">{t.phases.land.description}</p>
           </div>
         </section>
       </div>
       
-      {/* Regular Content Sections */}
       <div className="main-content">
         <Features />
         <Stats />

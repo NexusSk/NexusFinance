@@ -1,11 +1,13 @@
 import { useRef, useEffect } from 'react'
 import { gsap } from 'gsap'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 export function Hero({ isVisible, onGetStarted }) {
   const heroRef = useRef()
   const titleRef = useRef()
   const subtitleRef = useRef()
   const ctaRef = useRef()
+  const { t } = useLanguage()
   
   useEffect(() => {
     if (isVisible) {
@@ -38,15 +40,14 @@ export function Hero({ isVisible, onGetStarted }) {
     }
   }, [isVisible])
   
-  const title = "The Future of Finance"
-  const words = title.split(' ')
+  const words = t.hero.title.split(' ')
   
   return (
     <section ref={heroRef} className="hero-section">
       <div className="hero-content">
         <div className="hero-badge">
           <span className="badge-dot"></span>
-          Premium Financial Solutions
+          {t.hero.badge}
         </div>
         
         <h1 ref={titleRef} className="hero-title">
@@ -58,24 +59,23 @@ export function Hero({ isVisible, onGetStarted }) {
         </h1>
         
         <p ref={subtitleRef} className="hero-subtitle">
-          Experience next-generation wealth management with cutting-edge technology
-          and personalized strategies designed for the modern investor.
+          {t.hero.subtitle}
         </p>
         
         <div ref={ctaRef} className="hero-cta">
           <button className="btn btn-primary" onClick={onGetStarted}>
-            Get Started
+            {t.hero.cta}
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
           <button className="btn btn-secondary">
-            Learn More
+            {t.hero.learnMore}
           </button>
         </div>
         
         <div className="scroll-indicator">
-          <span>Scroll to explore</span>
+          <span>{t.hero.scrollToExplore}</span>
           <div className="scroll-line">
             <div className="scroll-dot"></div>
           </div>

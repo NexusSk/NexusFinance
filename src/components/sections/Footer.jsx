@@ -1,4 +1,8 @@
+import { useLanguage } from '../../i18n/LanguageContext'
+
 export function Footer() {
+  const { t } = useLanguage()
+  
   return (
     <footer className="footer">
       <div className="container">
@@ -9,7 +13,7 @@ export function Footer() {
               <span>NexusFinance</span>
             </div>
             <p className="footer-tagline">
-              The future of finance, today.
+              {t.footer.tagline}
             </p>
             <div className="social-links">
               <a href="#" className="social-link" aria-label="Twitter">
@@ -34,50 +38,50 @@ export function Footer() {
           
           <div className="footer-links">
             <div className="footer-column">
-              <h4>Product</h4>
+              <h4>{t.footer.product}</h4>
               <ul>
-                <li><a href="#">Features</a></li>
-                <li><a href="#">Pricing</a></li>
-                <li><a href="#">Security</a></li>
-                <li><a href="#">Roadmap</a></li>
+                <li><a href="#">{t.footer.features}</a></li>
+                <li><a href="#">{t.footer.pricing}</a></li>
+                <li><a href="#">{t.footer.security}</a></li>
+                <li><a href="#">{t.footer.roadmap}</a></li>
               </ul>
             </div>
             
             <div className="footer-column">
-              <h4>Company</h4>
+              <h4>{t.footer.company}</h4>
               <ul>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Careers</a></li>
-                <li><a href="#">Press</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#">{t.footer.about}</a></li>
+                <li><a href="#">{t.footer.careers}</a></li>
+                <li><a href="#">{t.footer.press}</a></li>
+                <li><a href="#">{t.footer.contact}</a></li>
               </ul>
             </div>
             
             <div className="footer-column">
-              <h4>Resources</h4>
+              <h4>{t.footer.resources}</h4>
               <ul>
-                <li><a href="#">Documentation</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Support</a></li>
-                <li><a href="#">API</a></li>
+                <li><a href="#">{t.footer.documentation}</a></li>
+                <li><a href="#">{t.footer.blog}</a></li>
+                <li><a href="#">{t.footer.support}</a></li>
+                <li><a href="#">{t.footer.api}</a></li>
               </ul>
             </div>
             
             <div className="footer-column">
-              <h4>Legal</h4>
+              <h4>{t.footer.legal}</h4>
               <ul>
-                <li><a href="#">Privacy</a></li>
-                <li><a href="#">Terms</a></li>
-                <li><a href="#">Cookies</a></li>
-                <li><a href="#">Licenses</a></li>
+                <li><a href="#">{t.footer.privacy}</a></li>
+                <li><a href="#">{t.footer.terms}</a></li>
+                <li><a href="#">{t.footer.cookies}</a></li>
+                <li><a href="#">{t.footer.licenses}</a></li>
               </ul>
             </div>
           </div>
         </div>
         
         <div className="footer-bottom">
-          <p>&copy; 2026 NexusFinance. All rights reserved.</p>
-          <p>Built with precision for the modern investor.</p>
+          <p>{t.footer.copyright}</p>
+          <p>{t.footer.builtWith}</p>
         </div>
       </div>
     </footer>
